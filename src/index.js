@@ -1,13 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+
+import store from './store';
+
 import App from './shared/features/App/App';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 
 ReactDOM.render(
-  <React.Fragment>
+  <Provider store={store}>
     <App />
-  </React.Fragment>, 
+  </Provider>,
   document.getElementById('root')
 );
 
