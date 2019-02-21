@@ -1,17 +1,13 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { got, err } from '../actions/getExchangeRates';
-
-const asyncFunc = async () => {
-  let response = await fetch('https://api.exchangeratesapi.io/latest');
-  let data = await response.json()
-  return data;
-};
+import { apiRequest } from '../../../../shared/core/apiRequest';
 
 function* getExchangeRates() {
   try {
-    const res = yield call(asyncFunc);
+    const res = yield call(apiRequest, { base: 'USD' });
     yield put(got(res));
   } catch (e) {
+    console.log(e);
     yield put(err(e));
   }
 }

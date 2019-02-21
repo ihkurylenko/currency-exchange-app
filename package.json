@@ -43,6 +43,7 @@
     "react-app-polyfill": "^0.2.1",
     "react-dev-utils": "^7.0.3",
     "react-dom": "^16.8.2",
+    "react-onclickoutside": "^6.8.0",
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",
     "redux-saga": "^1.0.1",

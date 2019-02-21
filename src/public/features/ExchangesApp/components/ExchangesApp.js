@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { req as getExchangeRates } from '../actions/getExchangeRates';
+
+import { CurrencyBlock } from '../../CurrencyBlock/components/CurrencyBlock';
+import { CurrentRatesBlock } from '../../CurrentRatesBlock/components/CurrentRatesBlock';
 import { ExchangesAppStyled } from './styles';
 
 class ExchangesApp extends Component {
@@ -11,13 +14,24 @@ class ExchangesApp extends Component {
   }
 
   render() {
-    return <ExchangesAppStyled>Main app here</ExchangesAppStyled>
-  }
+    const { status } = this.props;
 
+    return (
+      <React.Fragment>
+        {status === 'REQ' && (<p>Loading...</p>)}
+        {status === 'GOT' && (
+          <ExchangesAppStyled>
+            <CurrencyBlock/>
+            <CurrentRatesBlock/>
+          </ExchangesAppStyled>
+        )}
+      </React.Fragment>
+    )
+  }
 }
 
 const mapStateToProps = store => ({
-  status: store.getExchangeRatesReducer
+  status: store.getExchangeRatesReducer.status
 });
 
 const mapDispatchToProps = dispatch =>

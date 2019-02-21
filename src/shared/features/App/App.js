@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header } from '../../layouts/Header/Header';
+import { AppHeader } from '../../layouts/AppHeader/AppHeader';
 import { ExchangesApp } from '../../../public/features/ExchangesApp/components/ExchangesApp';
 import { AppStyled } from './styles';
 
@@ -7,7 +7,7 @@ class App extends Component {
   render() {
     return (
       <AppStyled>
-        <Header/>
+        <AppHeader/>
         <ExchangesApp />
       </AppStyled>
     );
