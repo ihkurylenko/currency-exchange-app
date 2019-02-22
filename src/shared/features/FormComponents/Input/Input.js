@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Label } from '../Label/Label';
 import { LabelContainer, InputStyled, InputWrapper } from './styles';
 
-const Input = ({ value, name, placeholder, maxLength, label, onChange }) => {
+const Input = ({ value, name, placeholder, maxLength, label, step, onChange }) => {
   return (
     <InputWrapper>
       {!!label && (
@@ -10,7 +10,7 @@ const Input = ({ value, name, placeholder, maxLength, label, onChange }) => {
           <Label label={label} name={name}/>
         </LabelContainer>
       )}
-      <InputStyled value={value} name={name} placeholder={placeholder} onChange={onChange}/>
+      <InputStyled value={value} name={name} placeholder={placeholder} step={step} onChange={onChange}/>
     </InputWrapper>
   );
 }

@@ -46,12 +46,26 @@ export const Container = styled.div`
 
 export const FromBlock = styled.div`
   display: flex;
+  justify-content: flex-end;
   align-items: flex-end;
 `;
 
 export const ToBlock = styled.div`
+  padding: 50px 0;
   display: flex;
+  justify-content: flex-end;
   align-items: flex-end;
+`;
+
+export const InputWrapper = styled.div`
+  width: 200px;
+  display: flex;
+`;
+
+export const SelectWrapper = styled.div`
+  width: 350px;
+  padding-left: 15px;
+  display: flex;
 `;
 
 export const Label = styled.div`
@@ -60,4 +74,26 @@ export const Label = styled.div`
   img {
     margin-right: 10px;
   }
+`;
+
+export const YourRateBlock = styled.div`
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid lightgray;
+`;
+
+export const YourRateTitle = styled.div`
+  display: flex;
+  font-size: 18px;
+`;
+
+export const YourRateContent = styled.div`
+  display: flex;
+  font-size: 22px;
+`;
+
+export const YourRateFooter = styled.div`
+  display: flex;
+  font-size: 16px;
 `;

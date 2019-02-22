@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { objToArr, imgDefiner } from '../../../../shared/core/utils';
+import { imgDefiner } from '../../../../shared/core/utils';
 
 import { BlockHeader } from '../../../../shared/layouts/BlockHeader/BlockHeader';
 import { EachCurrency } from './EachCurrency/EachCurrency';
@@ -10,17 +10,18 @@ import { CurrentRatesBlockStyled, Content } from './styles';
 class CurrentRatesBlock extends Component {
   renderEachRate = (arr) => 
     arr.map((item, index) => (
-      <EachCurrency img={imgDefiner(item.country)} key={index} item={item.country} rate={item.rate}/>
+      <EachCurrency img={imgDefiner(item.country)} key={index} item={item.country} rate={item.rate.toFixed(4)}/>
     ));
 
   render() {
-    const mappedRates = objToArr(this.props.rates);
+    const { rates } = this.props;
 
-    const filteredRates = mappedRates.filter(
+    const filteredRates = rates.filter(
       item => item.country === 'GBP' || 
       item.country === 'CAD' || 
       item.country === 'MXN' || 
-      item.country === 'JPY'
+      item.country === 'JPY' ||
+      item.country === 'EUR'
     );
 
     return (
@@ -34,7 +35,7 @@ class CurrentRatesBlock extends Component {
 }
 
 const mapStateToProps = store => ({
-  rates: store.getExchangeRatesReducer.response.rates
+  rates: store.getExchangeRatesReducer.response.mappedRates
 });
 
 const CurrentRatesBlockConnect = connect(

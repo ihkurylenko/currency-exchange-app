@@ -14,7 +14,8 @@ export const InputStyled = styled.input.attrs({ type: 'number' })`
   box-sizing: border-box;
   outline: none;
   line-height: 24px;
-  font-size: 14px;
+  font-size: 18px;
+  color: rgb(74, 156, 207);
   border: 1px solid lightgray;
 `;
 
