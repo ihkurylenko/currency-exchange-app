@@ -32,7 +32,7 @@ class ExchangesApp extends Component {
 }
 
 const mapStateToProps = store => ({
-  status: store.getExchangeRatesReducer.status
+  status: store.getExchangeRates.status
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({ getExchangeRates }, dispatch);

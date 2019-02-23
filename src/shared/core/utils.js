@@ -32,8 +32,8 @@ import GBP from 'shared/images/GBP.png';
 import JPY from 'shared/images/JPY.png';
 import MXN from 'shared/images/MXN.png';
 
-export const imgDefiner = country => {
-  switch (country) {
+export const imgDefiner = currency => {
+  switch (currency) {
     case 'CAD':
       return CAD;
     case 'EUR':
@@ -105,4 +105,4 @@ export const imgDefiner = country => {
   }
 };
 
-export const objToArr = obj => Object.keys(obj).map(key => ({ country: key, rate: obj[key] }));
+export const ratesMapper = obj => Object.keys(obj).map(key => ({ currency: key, rate: obj[key] }));

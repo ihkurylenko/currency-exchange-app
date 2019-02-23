@@ -1,12 +1,12 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { got, err } from '../actions/getExchangeRates';
 import { apiRequest } from 'shared/core/apiRequest';
-import { objToArr } from 'shared/core/utils';
+import { ratesMapper } from 'shared/core/utils';
 
 function* getExchangeRates() {
   try {
     const res = yield call(apiRequest, { base: 'USD' });
-    const mappedRates = objToArr(res.rates);
+    const mappedRates = ratesMapper(res.rates);
 
     yield put(got({ ...res, mappedRates }));
   } catch (e) {

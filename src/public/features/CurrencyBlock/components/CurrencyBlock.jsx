@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { imgDefiner } from 'shared/core/utils';
 
-import { set as setExchangeData } from '../actions/setCurrentExchange';
+import { setCurrencyFrom, setCurrencyTo } from '../actions/setCurrencyValues';
 
 import { Input } from 'shared/features/FormComponents/Input/Input';
 import { Select } from 'shared/features/FormComponents/Select/Select';
@@ -29,9 +29,9 @@ class CurrencyBlock extends Component {
   state = {
     activeTopic: 'currencyConverter',
     amountFrom: (1000).toFixed(2),
-    amountTo: (this.props.rates.filter(item => item.country === 'ILS')[0].rate * 1000).toFixed(2),
-    currencyFrom: this.props.currentExchange,
-    currencyTo: 'ILS'
+    amountTo: (this.props.rates.filter(item => item.currency === 'ILS')[0].rate * 1000).toFixed(2),
+    currencyFrom: 'USD',
+    currencyTo: 'USD'
   };
 
   onChange = e => {
@@ -44,10 +44,11 @@ class CurrencyBlock extends Component {
   onAmountChange = e => {
     const { name, value } = e.currentTarget;
     const { rates } = this.props;
+    console.log(rates);
 
     const amountFrom = name === 'amountFrom';
     const amountTo = name === 'amountTo';
-    const [{ rate: currency }] = rates.filter(item => item.country === this.state.currencyTo);
+    const [{ rate: currency }] = rates.filter(item => item.currency === this.state.currencyTo);
 
     this.setState({
       amountFrom: amountTo ? (value / currency).toFixed(2) : value,
@@ -61,16 +62,16 @@ class CurrencyBlock extends Component {
 
     const ratesOptions = rates.map(item => {
       return {
-        value: item.country,
+        value: item.currency,
         label: (
           <Label>
-            <img src={imgDefiner(item.country)} alt="flag" width="30px" height="20px" /> {item.country}
+            <img src={imgDefiner(item.currency)} alt="flag" width="30px" height="20px" /> {item.currency}
           </Label>
         )
       };
     });
-    const [{ rate: currency }] = rates.filter(item => item.country === this.state.currencyTo);
-    console.log();
+    const [{ rate: currency }] = rates.filter(item => item.currency === this.state.currencyTo);
+    console.log(this.props);
 
     return (
       <CurrencyBlockStyled>
@@ -118,15 +119,15 @@ class CurrencyBlock extends Component {
   }
 }
 
-const mapStateToProps = ({ getExchangeRatesReducer, setCurrentExchangeReducer }) => ({
-  status: getExchangeRatesReducer,
-  rates: getExchangeRatesReducer.response.mappedRates,
-  ilsRate: getExchangeRatesReducer.response.rates.ILS,
-  updateTime: getExchangeRatesReducer.response.date,
-  currentExchange: setCurrentExchangeReducer.currentExchange
+const mapStateToProps = ({ getExchangeRates, currencyValues }) => ({
+  status: getExchangeRates,
+  rates: getExchangeRates.response.mappedRates,
+  ilsRate: getExchangeRates.response.rates.ILS,
+  updateTime: getExchangeRates.response.date,
+  currencyFrom: currencyValues.currencyFrom
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ setExchangeData }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ setCurrencyFrom, setCurrencyTo }, dispatch);
 
 const CurrencyBlockConnect = connect(
   mapStateToProps,
