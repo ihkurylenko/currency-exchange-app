@@ -24,7 +24,6 @@
   },
   "rules": {
     "react/prop-types": 0,
-    "no-console": "off",
-    "no-unused-vars": "off"
+    "no-console": "off"
   }
 }

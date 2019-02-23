@@ -106,3 +106,8 @@ export const imgDefiner = currency => {
 };
 
 export const ratesMapper = obj => Object.keys(obj).map(key => ({ currency: key, rate: obj[key] }));
+
+export const round = (value, step = 0.05) => {
+  const inv = 1.0 / step;
+  return (Math.round(value * inv) / inv).toFixed(2);
+};

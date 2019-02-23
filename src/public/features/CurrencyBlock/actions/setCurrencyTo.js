@@ -1,9 +1,4 @@
-export const req = request => ({
-  type: 'SET_CURRENCY_TO_REQ',
+export const set = request => ({
+  type: 'SET_CURRENCY_TO',
   request
-});
-
-export const got = response => ({
-  type: 'SET_CURRENCY_TO_GOT',
-  response
 });

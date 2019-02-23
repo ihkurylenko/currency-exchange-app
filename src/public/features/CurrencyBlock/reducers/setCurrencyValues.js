@@ -28,7 +28,7 @@ const setCurrencyValues = (state = initialState, action) => {
         error: action.error
       };
 
-    case 'SET_CURRENCY_TO_GOT':
+    case 'SET_CURRENCY_TO':
       return {
         ...state,
         currencyTo: action.request

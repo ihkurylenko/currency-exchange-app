@@ -18,21 +18,22 @@ class ExchangesApp extends Component {
     const { status } = this.props;
 
     return (
-      <React.Fragment>
-        {status === 'REQ' && <Loader />}
-        {status === 'GOT' && (
-          <ExchangesAppStyled>
+      <ExchangesAppStyled>
+        {status === 'GOT' ? (
+          <React.Fragment>
             <CurrencyBlock />
             <CurrentRatesBlock />
-          </ExchangesAppStyled>
+          </React.Fragment>
+        ) : (
+          <Loader />
         )}
-      </React.Fragment>
+      </ExchangesAppStyled>
     );
   }
 }
 
-const mapStateToProps = store => ({
-  status: store.getExchangeRates.status
+const mapStateToProps = ({ getExchangeRates }) => ({
+  status: getExchangeRates.status
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({ getExchangeRates }, dispatch);

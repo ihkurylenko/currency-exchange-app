@@ -1,5 +1,9 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { got, err } from '../actions/getExchangeRates';
+import {
+  got as setCurrencyFromGot,
+  err as setCurrencyFromErr
+} from 'public/features/CurrencyBlock/actions/setCurrencyFrom';
 import { apiRequest } from 'shared/core/apiRequest';
 import { ratesMapper } from 'shared/core/utils';
 
@@ -8,10 +12,11 @@ function* getExchangeRates() {
     const res = yield call(apiRequest, { base: 'USD' });
     const mappedRates = ratesMapper(res.rates);
 
+    yield put(setCurrencyFromGot(res));
     yield put(got({ ...res, mappedRates }));
   } catch (e) {
-    console.log(e);
     yield put(err(e));
+    yield put(setCurrencyFromErr(e));
   }
 }
 
