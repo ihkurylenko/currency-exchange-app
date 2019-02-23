@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { imgDefiner } from 'shared/core/utils';
 
-import { BlockHeader } from '../../../../shared/layouts/BlockHeader/BlockHeader';
+import { BlockHeader } from 'shared/layouts/BlockHeader/BlockHeader';
 import { EachCurrency } from './EachCurrency/EachCurrency';
 
 import { CurrentRatesBlockStyled, Content } from './styles';

@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { got, err } from '../actions/getExchangeRates';
-import { apiRequest } from '../../../../shared/core/apiRequest';
-import { objToArr } from '../../../../shared/core/utils';
+import { apiRequest } from 'shared/core/apiRequest';
+import { objToArr } from 'shared/core/utils';
 
 function* getExchangeRates() {
   try {

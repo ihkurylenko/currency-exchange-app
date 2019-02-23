@@ -3,10 +3,7 @@ const initialState = {
   response: []
 };
 
-const getExchangeRatesReducer = (
-  state = initialState,
-  action
-) => {
+const getExchangeRatesReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'GET_EXCHANGE_RATES_REQUEST':
       return {

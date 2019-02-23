@@ -8,6 +8,6 @@ const BlockHeader = ({ title, subtitle }) => {
       <Title>{subtitle}</Title>
     </BlockHeaderStyled>
   );
-}
+};
 
 export { BlockHeader };

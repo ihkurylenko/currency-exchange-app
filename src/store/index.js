@@ -21,10 +21,7 @@ function* rootSaga() {
   const ExchangeAppSagasForks = ExchangeAppSagas.map(saga => fork(saga));
   const SetCurrentExchangeSagasForks = SetCurrentExchangeSagas.map(saga => fork(saga));
 
-  yield all([
-    ...ExchangeAppSagasForks,
-    ...SetCurrentExchangeSagasForks
-  ]);
+  yield all([...ExchangeAppSagasForks, ...SetCurrentExchangeSagasForks]);
 }
 
 sagaMiddleware.run(rootSaga);
