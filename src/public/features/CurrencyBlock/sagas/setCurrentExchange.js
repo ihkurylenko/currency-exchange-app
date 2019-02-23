@@ -1,9 +1,9 @@
 import { put, takeLatest } from 'redux-saga/effects';
-import { set } from '../actions/setCurrentExchange';
+import { setCurrencyFrom, setCurrencyTo } from '../actions/setCurrencyValues';
 
 function* setCurrentExchange(action) {
   try {
-    yield put(set(action.data));
+    yield put(action.data);
   } catch (e) {
     console.log(e);
   }

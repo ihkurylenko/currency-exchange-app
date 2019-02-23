@@ -78,4 +78,3 @@ export const InputStyles = styled.input`
   line-height: 24px;
   font-size: 14px;
 `;
-

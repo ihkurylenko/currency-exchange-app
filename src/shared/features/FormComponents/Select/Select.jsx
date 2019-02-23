@@ -34,7 +34,7 @@ class Select extends React.Component {
     });
   };
 
-  closeList = (value) =>
+  closeList = value =>
     this.setState({
       isOpen: false,
       isTyping: false,
@@ -56,19 +56,16 @@ class Select extends React.Component {
     this.closeList(value);
   };
 
-  onTyping = (e) => {
+  onTyping = e => {
     this.setState({
       text: e.currentTarget.value
     });
   };
 
-  renderList = (options) => {
+  renderList = options => {
     return options.map((option, index) => {
       return (
-        <SelectionListItem
-          key={index}
-          onClick={() => this.onClickItem(this.props.name, option.value)}
-        >
+        <SelectionListItem key={index} onClick={() => this.onClickItem(this.props.name, option.value)}>
           {option.label}
         </SelectionListItem>
       );
@@ -76,13 +73,7 @@ class Select extends React.Component {
   };
 
   render() {
-    const {
-      label,
-      options,
-      value,
-      name,
-      allowPrintMode
-    } = this.props;
+    const { label, options, value, name, allowPrintMode } = this.props;
     const { isOpen, isTyping, text } = this.state;
 
     let currentLabel = options[0].label;
@@ -94,21 +85,13 @@ class Select extends React.Component {
       text && allowPrintMode ? options.filter(o => o.label.toUpperCase().includes(text.toUpperCase())) : options;
     return (
       <SelectStyled name={name}>
-        {!!label && (
-          <Label label={label}>
-            {label}
-          </Label>
-        )}
-        <SelectionCurrent
-          onClick={this.onCurrentClick}
-        >
+        {!!label && <Label label={label}>{label}</Label>}
+        <SelectionCurrent onClick={this.onCurrentClick}>
           <SelectionCurrentValue isTyping={isTyping}>
             {isTyping ? <InputStyles type="text" value={text} onChange={this.onTyping} /> : currentLabel}
           </SelectionCurrentValue>
         </SelectionCurrent>
-        <SelectionList isOpen={isOpen}>
-          {this.renderList(filteredOptions)}
-        </SelectionList>
+        <SelectionList isOpen={isOpen}>{this.renderList(filteredOptions)}</SelectionList>
       </SelectStyled>
     );
   }
@@ -117,4 +100,3 @@ class Select extends React.Component {
 const select = listensToClickOutside(Select);
 
 export { select as Select };
-
