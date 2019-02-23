@@ -4,8 +4,9 @@ import { bindActionCreators } from 'redux';
 
 import { req as getExchangeRates } from '../actions/getExchangeRates';
 
-import { CurrencyBlock } from '../../CurrencyBlock/components/CurrencyBlock';
-import { CurrentRatesBlock } from '../../CurrentRatesBlock/components/CurrentRatesBlock';
+import { CurrencyBlock } from 'public/features/CurrencyBlock/components/CurrencyBlock';
+import { CurrentRatesBlock } from 'public/features/CurrentRatesBlock/components/CurrentRatesBlock';
+import { Loader } from 'shared/layouts/Loader/Loader';
 import { ExchangesAppStyled } from './styles';
 
 class ExchangesApp extends Component {
@@ -18,24 +19,23 @@ class ExchangesApp extends Component {
 
     return (
       <React.Fragment>
-        {status === 'REQ' && (<p>Loading...</p>)}
+        {status === 'REQ' && <Loader />}
         {status === 'GOT' && (
           <ExchangesAppStyled>
-            <CurrencyBlock/>
-            <CurrentRatesBlock/>
+            <CurrencyBlock />
+            <CurrentRatesBlock />
           </ExchangesAppStyled>
         )}
       </React.Fragment>
-    )
+    );
   }
 }
 
 const mapStateToProps = store => ({
-  status: store.getExchangeRatesReducer.status
+  status: store.getExchangeRates.status
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getExchangeRates }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ getExchangeRates }, dispatch);
 
 const ExchangesAppConnect = connect(
   mapStateToProps,

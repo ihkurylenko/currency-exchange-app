@@ -1,4 +1,4 @@
-export const apiRequest = async (params) => {
+export const apiRequest = async params => {
   if (params) {
     const urlParams = new URLSearchParams(Object.entries(params));
     const response = await fetch('https://api.exchangeratesapi.io/latest?' + urlParams);
@@ -9,4 +9,4 @@ export const apiRequest = async (params) => {
     const data = await response.json();
     return data;
   }
-}
+};

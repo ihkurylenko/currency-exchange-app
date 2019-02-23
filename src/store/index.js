@@ -4,15 +4,15 @@ import { all, fork } from 'redux-saga/effects';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
 
-import getExchangeRatesReducer from '../public/features/ExchangesApp/reducers/getExchangeRates';
-import setCurrentExchangeReducer from '../public/features/CurrencyBlock/reducers/setCurrentExchange';
+import getExchangeRates from 'public/features/ExchangesApp/reducers/getExchangeRates';
+import currencyValues from 'public/features/CurrencyBlock/reducers/setCurrencyValues';
 
-import ExchangeAppSagas from '../public/features/ExchangesApp/sagas';
-import SetCurrentExchangeSagas from '../public/features/CurrencyBlock/sagas';
+import ExchangeAppSagas from 'public/features/ExchangesApp/sagas';
+import SetCurrentExchangeSagas from 'public/features/CurrencyBlock/sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
-  combineReducers({ getExchangeRatesReducer, setCurrentExchangeReducer }),
+  combineReducers({ getExchangeRates, currencyValues }),
   {},
   composeWithDevTools(applyMiddleware(sagaMiddleware))
 );
@@ -21,10 +21,7 @@ function* rootSaga() {
   const ExchangeAppSagasForks = ExchangeAppSagas.map(saga => fork(saga));
   const SetCurrentExchangeSagasForks = SetCurrentExchangeSagas.map(saga => fork(saga));
 
-  yield all([
-    ...ExchangeAppSagasForks,
-    ...SetCurrentExchangeSagasForks
-  ]);
+  yield all([...ExchangeAppSagasForks, ...SetCurrentExchangeSagasForks]);
 }
 
 sagaMiddleware.run(rootSaga);
