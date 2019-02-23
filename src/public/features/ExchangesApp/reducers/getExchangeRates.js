@@ -10,12 +10,14 @@ const getExchangeRates = (state = initialState, action) => {
         ...state,
         status: 'REQUEST'
       };
+
     case 'GET_EXCHANGE_RATES_GOT':
       return {
         ...state,
         status: 'GOT',
         response: action.response
       };
+
     case 'GET_EXCHANGE_RATES_ERROR':
       return {
         ...state,

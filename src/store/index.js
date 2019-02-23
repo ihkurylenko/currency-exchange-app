@@ -8,7 +8,7 @@ import getExchangeRates from 'public/features/ExchangesApp/reducers/getExchangeR
 import currencyValues from 'public/features/CurrencyBlock/reducers/setCurrencyValues';
 
 import ExchangeAppSagas from 'public/features/ExchangesApp/sagas';
-import SetCurrentExchangeSagas from 'public/features/CurrencyBlock/sagas';
+import SetCurrencyValuesSagas from 'public/features/CurrencyBlock/sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
@@ -19,9 +19,9 @@ const store = createStore(
 
 function* rootSaga() {
   const ExchangeAppSagasForks = ExchangeAppSagas.map(saga => fork(saga));
-  const SetCurrentExchangeSagasForks = SetCurrentExchangeSagas.map(saga => fork(saga));
+  const SetCurrencyValuesSagasForks = SetCurrencyValuesSagas.map(saga => fork(saga));
 
-  yield all([...ExchangeAppSagasForks, ...SetCurrentExchangeSagasForks]);
+  yield all([...ExchangeAppSagasForks, ...SetCurrencyValuesSagasForks]);
 }
 
 sagaMiddleware.run(rootSaga);

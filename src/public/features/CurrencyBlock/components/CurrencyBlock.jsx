@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { imgDefiner } from 'shared/core/utils';
 
-import { setCurrencyFrom, setCurrencyTo } from '../actions/setCurrencyValues';
+import { req as setCurrencyFrom } from '../actions/setCurrencyFrom';
+import { req as setCurrencyTo } from '../actions/setCurrencyTo';
 
 import { Input } from 'shared/features/FormComponents/Input/Input';
 import { Select } from 'shared/features/FormComponents/Select/Select';
+import { Loader } from 'shared/layouts/Loader/Loader';
 
 import {
   CurrencyBlockStyled,
@@ -28,39 +30,46 @@ import {
 class CurrencyBlock extends Component {
   state = {
     activeTopic: 'currencyConverter',
-    amountFrom: (1000).toFixed(2),
-    amountTo: (this.props.rates.filter(item => item.currency === 'ILS')[0].rate * 1000).toFixed(2),
-    currencyFrom: 'USD',
-    currencyTo: 'USD'
+    amountFrom: '1000',
+    currencyFrom: this.props.currencyFrom,
+    amountTo: (this.props.rates[this.props.currencyTo] * 1000).toFixed(2),
+    currencyTo: this.props.currencyTo
   };
 
   onChange = e => {
     const { name, value } = e.currentTarget;
-    // const { setExchangeData } = this.props;
+    const { setCurrencyFrom } = this.props;
 
+    const currencyFrom = name === 'currencyFrom';
+    if (currencyFrom) {
+      setCurrencyFrom(value);
+    }
     this.setState({ [name]: value });
   };
 
   onAmountChange = e => {
     const { name, value } = e.currentTarget;
-    const { rates } = this.props;
-    console.log(rates);
+    const { currencyTo } = this.state;
+    const { rates, mappedRates, targetRates } = this.props;
 
     const amountFrom = name === 'amountFrom';
     const amountTo = name === 'amountTo';
-    const [{ rate: currency }] = rates.filter(item => item.currency === this.state.currencyTo);
+
+    const targetAmount = targetRates ? targetRates[currencyTo] : rates[this.props.currencyTo];
 
     this.setState({
-      amountFrom: amountTo ? (value / currency).toFixed(2) : value,
-      amountTo: amountFrom ? (value * currency).toFixed(2) : value
+      amountFrom: amountTo ? (value / targetAmount).toFixed(2) : value,
+      amountTo: amountFrom ? (value * targetAmount).toFixed(2) : value
     });
   };
 
   render() {
     const { activeTopic, amountFrom, amountTo, currencyFrom, currencyTo } = this.state;
-    const { rates } = this.props;
+    const { rates, mappedRates, targetRates, targetLoading } = this.props;
 
-    const ratesOptions = rates.map(item => {
+    const targetAmount = targetRates ? targetRates[currencyTo] : rates[this.props.currencyTo];
+
+    const ratesOptions = mappedRates.map(item => {
       return {
         value: item.currency,
         label: (
@@ -70,8 +79,6 @@ class CurrencyBlock extends Component {
         )
       };
     });
-    const [{ rate: currency }] = rates.filter(item => item.currency === this.state.currencyTo);
-    console.log(this.props);
 
     return (
       <CurrencyBlockStyled>
@@ -109,7 +116,7 @@ class CurrencyBlock extends Component {
           <YourRateBlock>
             <YourRateTitle>Your rate:</YourRateTitle>
             <YourRateContent>
-              {currencyFrom} 1 = {currencyTo} {currency.toFixed(4)}
+              {currencyFrom} 1 = {targetLoading === 'REQUEST' ? <Loader /> : `${currencyTo} ${targetAmount.toFixed(4)}`}
             </YourRateContent>
             <YourRateFooter>Last updated {this.props.updateTime}</YourRateFooter>
           </YourRateBlock>
@@ -120,11 +127,13 @@ class CurrencyBlock extends Component {
 }
 
 const mapStateToProps = ({ getExchangeRates, currencyValues }) => ({
-  status: getExchangeRates,
-  rates: getExchangeRates.response.mappedRates,
-  ilsRate: getExchangeRates.response.rates.ILS,
-  updateTime: getExchangeRates.response.date,
-  currencyFrom: currencyValues.currencyFrom
+  currencyFrom: currencyValues.currencyFrom,
+  currencyTo: currencyValues.currencyTo,
+  targetRates: currencyValues.response.rates,
+  targetLoading: currencyValues.status,
+  rates: getExchangeRates.response.rates,
+  mappedRates: getExchangeRates.response.mappedRates,
+  updateTime: getExchangeRates.response.date
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({ setCurrencyFrom, setCurrencyTo }, dispatch);

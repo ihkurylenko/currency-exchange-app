@@ -1,3 +1,4 @@
-import setCurrentExchangeSaga from './setCurrentExchange';
+import setCurrencyFromSaga from './setCurrencyFrom';
+import setCurrencyToSaga from './setCurrencyTo';
 
-export default [setCurrentExchangeSaga];
+export default [setCurrencyFromSaga, setCurrencyToSaga];
