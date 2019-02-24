@@ -10,14 +10,22 @@ import { CurrentRatesBlockStyled, Content } from './styles';
 class CurrentRatesBlock extends Component {
   renderEachRate = arr =>
     arr.map((item, index) => (
-      <EachCurrency img={imgDefiner(item.currency)} key={index} item={item.currency} rate={item.rate.toFixed(4)} />
+      <EachCurrency
+        img={imgDefiner(item.currency)}
+        key={index}
+        item={item.currency}
+        rate={item.rate.toFixed(4)}
+        loading={this.props.status}
+      />
     ));
 
   render() {
-    const { rates, currencyFrom, currencyTo } = this.props;
+    const { rates, targetRates, currencyFrom, currencyTo } = this.props;
+
+    const currentRates = targetRates ? targetRates : rates;
 
     const filteredRates = () => {
-      let ratesFiltered = rates.filter(
+      let ratesFiltered = currentRates.filter(
         item =>
           (item.currency === 'GBP' ||
             item.currency === 'CAD' ||
@@ -27,11 +35,11 @@ class CurrentRatesBlock extends Component {
           item.currency !== this.props.currencyFrom
       );
       if (ratesFiltered.length === 4) {
-        const [usd] = ratesFilter(rates, 'USD');
+        const [usd] = ratesFilter(currentRates, 'USD');
         ratesFiltered = [usd, ...ratesFiltered];
       }
       if (currencyFrom !== 'ILS' && currencyTo !== 'ILS') {
-        const [ils] = ratesFilter(rates, 'ILS');
+        const [ils] = ratesFilter(currentRates, 'ILS');
         ratesFiltered = [ils, ...ratesFiltered].slice(0, -1);
       }
       return ratesFiltered;
@@ -39,7 +47,7 @@ class CurrentRatesBlock extends Component {
 
     return (
       <CurrentRatesBlockStyled>
-        <BlockHeader title="Today's rates" subtitle="1 USD =" />
+        <BlockHeader title="Today's rates" subtitle={`1 ${currencyFrom} =`} />
         <Content>{this.renderEachRate(filteredRates())}</Content>
       </CurrentRatesBlockStyled>
     );
@@ -48,8 +56,10 @@ class CurrentRatesBlock extends Component {
 
 const mapStateToProps = ({ getExchangeRates, currencyValues }) => ({
   rates: getExchangeRates.response.mappedRates,
+  targetRates: currencyValues.response.mappedRates,
   currencyFrom: currencyValues.currencyFrom,
-  currencyTo: currencyValues.currencyTo
+  currencyTo: currencyValues.currencyTo,
+  status: currencyValues.status
 });
 
 const CurrentRatesBlockConnect = connect(
