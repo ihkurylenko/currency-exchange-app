@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { imgDefiner, round } from 'shared/core/utils';
+import { imgDefiner, round, now, lastMonth, dateFormatter } from 'shared/core/utils';
 
 import { req as setCurrencyFrom } from '../actions/setCurrencyFrom';
 import { set as setCurrencyTo } from '../actions/setCurrencyTo';
+import { req as getHistoryRates } from '../actions/getHistoryRates';
 
+import { HistoryChart } from './HistoryChart/HistoryChart';
 import { Input } from 'shared/features/FormComponents/Input/Input';
 import { Select } from 'shared/features/FormComponents/Select/Select';
+import { Button } from 'shared/features/FormComponents/Button/Button';
 import { Loader } from 'shared/layouts/Loader/Loader';
 
 import {
@@ -16,6 +19,7 @@ import {
   TopicContainer,
   Topic,
   Container,
+  HistoryBlock,
   FromBlock,
   ToBlock,
   Label,
@@ -30,7 +34,7 @@ import {
 class CurrencyBlock extends Component {
   state = {
     activeTopic: 'currencyConverter',
-    amountFrom: '1000',
+    amountFrom: '1000.00',
     currencyFrom: this.props.currencyFrom,
     amountTo: round(this.props.targetRates[this.props.currencyTo] * 1000),
     currencyTo: this.props.currencyTo
@@ -79,9 +83,17 @@ class CurrencyBlock extends Component {
     });
   };
 
+  switchToCurrencyConverter = () => {
+    this.setState({ activeTopic: 'historicalRates' });
+  };
+
+  switchToHistoricalRates = () => {
+    this.setState({ activeTopic: 'currencyConverter' });
+  };
+
   render() {
     const { activeTopic, amountFrom, amountTo, currencyFrom, currencyTo } = this.state;
-    const { rates, mappedRates, targetRates, targetLoading } = this.props;
+    const { rates, mappedRates, targetRates, targetLoading, getHistoryRates, updateTime } = this.props;
 
     const targetAmount = targetRates ? targetRates[currencyTo] : rates[this.props.currencyTo];
 
@@ -96,73 +108,94 @@ class CurrencyBlock extends Component {
       };
     });
 
+    const getHistoryRatesInfo = period =>
+      getHistoryRates({ startAt: lastMonth(period), endAt: now, base: currencyFrom });
+
+    const historyLoad = this.props.historyStatus === 'REQUEST';
+
     return (
       <CurrencyBlockStyled>
         <BlockHeader>
-          <TopicContainer
-            active={activeTopic === 'currencyConverter'}
-            onClick={() => this.setState({ activeTopic: 'currencyConverter' })}
-          >
+          <TopicContainer active={activeTopic === 'currencyConverter'} onClick={() => this.switchToHistoricalRates()}>
             <Topic>Currency converter</Topic>
           </TopicContainer>
-          <TopicContainer
-            active={activeTopic === 'historicalRates'}
-            onClick={() => this.setState({ activeTopic: 'historicalRates' })}
-          >
+          <TopicContainer active={activeTopic === 'historicalRates'} onClick={() => this.switchToCurrencyConverter()}>
             <Topic>Historical rates</Topic>
           </TopicContainer>
         </BlockHeader>
         <Container>
-          <FromBlock>
-            <InputWrapper>
-              <Input name="amountFrom" value={amountFrom} label="From" onChange={this.onAmountChange} />
-            </InputWrapper>
-            <SelectWrapper>
-              <Select
-                name="currencyFrom"
-                value={currencyFrom}
-                options={ratesOptions}
-                onChange={this.onCurrencyChange}
-              />
-            </SelectWrapper>
-          </FromBlock>
-          <ToBlock>
-            <InputWrapper>
-              <Input
-                name="amountTo"
-                value={amountTo}
-                label={targetLoading === 'REQUEST' ? 'LOADING...' : 'To'}
-                onChange={this.onAmountChange}
-              />
-            </InputWrapper>
-            <SelectWrapper>
-              <Select name="currencyTo" value={currencyTo} options={ratesOptions} onChange={this.onCurrencyChange} />
-            </SelectWrapper>
-          </ToBlock>
-          <YourRateBlock>
-            <YourRateTitle>Your rate:</YourRateTitle>
-            <YourRateContent>
-              {currencyFrom} 1 = {targetLoading === 'REQUEST' ? <Loader /> : `${currencyTo} ${targetAmount.toFixed(4)}`}
-            </YourRateContent>
-            <YourRateFooter>Last updated {this.props.updateTime}</YourRateFooter>
-          </YourRateBlock>
+          {activeTopic === 'historicalRates' ? (
+            <React.Fragment>
+              <HistoryBlock>
+                <Button label="Last month" onClick={() => getHistoryRatesInfo()} disabled={historyLoad} />
+                <Button label="Last 3 month" onClick={() => getHistoryRatesInfo(3)} disabled={historyLoad} />
+                <Button label="Last 6 month" onClick={() => getHistoryRatesInfo(6)} disabled={historyLoad} />
+                <Button label="Last 12 month" onClick={() => getHistoryRatesInfo(12)} disabled={historyLoad} />
+              </HistoryBlock>
+              <HistoryChart currencyTo={currencyTo} />
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <FromBlock>
+                <InputWrapper>
+                  <Input name="amountFrom" value={amountFrom} label="From" onChange={this.onAmountChange} />
+                </InputWrapper>
+                <SelectWrapper>
+                  <Select
+                    name="currencyFrom"
+                    value={currencyFrom}
+                    options={ratesOptions}
+                    onChange={this.onCurrencyChange}
+                  />
+                </SelectWrapper>
+              </FromBlock>
+              <ToBlock>
+                <InputWrapper>
+                  <Input
+                    name="amountTo"
+                    value={amountTo}
+                    label={targetLoading === 'REQUEST' ? 'LOADING...' : 'To'}
+                    onChange={this.onAmountChange}
+                  />
+                </InputWrapper>
+                <SelectWrapper>
+                  <Select
+                    name="currencyTo"
+                    value={currencyTo}
+                    options={ratesOptions}
+                    onChange={this.onCurrencyChange}
+                  />
+                </SelectWrapper>
+              </ToBlock>
+              <YourRateBlock>
+                <YourRateTitle>Your rate:</YourRateTitle>
+                <YourRateContent>
+                  {currencyFrom} 1 ={' '}
+                  {targetLoading === 'REQUEST' ? <Loader /> : `${currencyTo} ${targetAmount.toFixed(4)}`}
+                </YourRateContent>
+                <YourRateFooter>Last updated {dateFormatter(updateTime)}</YourRateFooter>
+              </YourRateBlock>
+            </React.Fragment>
+          )}
         </Container>
       </CurrencyBlockStyled>
     );
   }
 }
 
-const mapStateToProps = ({ getExchangeRates, currencyValues }) => ({
+const mapStateToProps = ({ getExchangeRates, currencyValues, historyRates }) => ({
   currencyFrom: currencyValues.currencyFrom,
   currencyTo: currencyValues.currencyTo,
   targetRates: currencyValues.response.rates,
   targetLoading: currencyValues.status,
   rates: getExchangeRates.response.rates,
   mappedRates: getExchangeRates.response.mappedRates,
-  updateTime: getExchangeRates.response.date
+  updateTime: getExchangeRates.response.date,
+  historyStatus: historyRates.status
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ setCurrencyFrom, setCurrencyTo }, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ setCurrencyFrom, setCurrencyTo, getHistoryRates }, dispatch);
 
 const CurrencyBlockConnect = connect(
   mapStateToProps,

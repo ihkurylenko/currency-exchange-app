@@ -4,12 +4,12 @@ import {
   got as setCurrencyFromGot,
   err as setCurrencyFromErr
 } from 'public/features/CurrencyBlock/actions/setCurrencyFrom';
-import { apiRequest } from 'shared/core/apiRequest';
+import { getLatestRates } from 'shared/core/apiRequest';
 import { ratesMapper } from 'shared/core/utils';
 
 function* getExchangeRates() {
   try {
-    const res = yield call(apiRequest, { base: 'USD' });
+    const res = yield call(getLatestRates, { base: 'USD' });
     const mappedRates = ratesMapper(res.rates);
 
     yield put(setCurrencyFromGot(res));

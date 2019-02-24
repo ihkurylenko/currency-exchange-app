@@ -7,7 +7,7 @@ const initialState = {
 
 const setCurrencyValues = (state = initialState, action) => {
   switch (action.type) {
-    case 'SET_CURRENCY_FROM_REQ':
+    case 'SET_CURRENCY_FROM_REQUEST':
       return {
         ...state,
         status: 'REQUEST',

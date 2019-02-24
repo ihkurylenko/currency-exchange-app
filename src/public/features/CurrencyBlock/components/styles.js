@@ -1,9 +1,11 @@
 import styled from 'styled-components';
+import { ButtonStyled } from 'shared/features/FormComponents/Button/styles';
 
 export const CurrencyBlockStyled = styled.div`
   margin-right: 50px;
   height: 500px;
   width: 700px;
+  position: relative;
   display: flex;
   flex-direction: column;
   border: 1px solid black;
@@ -39,9 +41,24 @@ export const Topic = styled.span`
 `;
 
 export const Container = styled.div`
-  padding: 30px;
+  height: 100%;
+  padding: 20px;
   display: flex;
   flex-direction: column;
+`;
+
+export const HistoryBlock = styled.div`
+  display: flex;
+  justify-content: center;
+
+  ${ButtonStyled} {
+    width: 150px;
+    margin-right: 20px;
+
+    &:last-child {
+      margin: 0;
+    }
+  }
 `;
 
 export const FromBlock = styled.div`
@@ -77,7 +94,7 @@ export const Label = styled.div`
 `;
 
 export const YourRateBlock = styled.div`
-  padding-top: 30px;
+  padding: 30px 0;
   display: flex;
   flex-direction: column;
   border-top: 1px solid lightgray;

@@ -1,5 +1,5 @@
 export const req = request => ({
-  type: 'SET_CURRENCY_FROM_REQ',
+  type: 'SET_CURRENCY_FROM_REQUEST',
   request
 });
 

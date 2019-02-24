@@ -7,6 +7,7 @@ import { req as getExchangeRates } from '../actions/getExchangeRates';
 import { CurrencyBlock } from 'public/features/CurrencyBlock/components/CurrencyBlock';
 import { CurrentRatesBlock } from 'public/features/CurrentRatesBlock/components/CurrentRatesBlock';
 import { Loader } from 'shared/layouts/Loader/Loader';
+import { Error } from 'shared/layouts/Error/Error';
 import { ExchangesAppStyled } from './styles';
 
 class ExchangesApp extends Component {
@@ -19,14 +20,14 @@ class ExchangesApp extends Component {
 
     return (
       <ExchangesAppStyled>
-        {status === 'GOT' ? (
+        {status === 'GOT' && (
           <React.Fragment>
             <CurrencyBlock />
             <CurrentRatesBlock />
           </React.Fragment>
-        ) : (
-          <Loader />
         )}
+        {status === 'REQUEST' && <Loader />}
+        {status === 'ERROR' && <Error />}
       </ExchangesAppStyled>
     );
   }
