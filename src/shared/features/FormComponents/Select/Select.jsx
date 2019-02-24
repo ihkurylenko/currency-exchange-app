@@ -25,7 +25,7 @@ class Select extends React.Component {
   };
 
   onCurrentClick = () => {
-    if (this.props.disabled || this.state.isTyping) {
+    if (this.state.isTyping) {
       return;
     }
     this.setState({

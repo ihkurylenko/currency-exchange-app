@@ -1,6 +1,6 @@
 import React from 'react';
 import { LoaderStyled } from './styles';
 
-const Loader = () => <LoaderStyled>Loading...</LoaderStyled>;
+const Loader = () => <LoaderStyled>PLEASE WAIT...</LoaderStyled>;
 
 export { Loader };

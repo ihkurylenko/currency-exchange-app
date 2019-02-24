@@ -4,6 +4,10 @@ export const EachCurrencyStyled = styled.div`
   padding: 20px 25px;
   display: flex;
   border-bottom: 1px solid gray;
+
+  &:last-child {
+    border-bottom: none;
+  }
 `;
 
 export const Img = styled.div`

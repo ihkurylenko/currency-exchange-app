@@ -1,3 +1,4 @@
-import setCurrentExchangeSaga from './setCurrentExchange';
+import setCurrencyFromSaga from './setCurrencyFrom';
+import getHistoryRatesSaga from './getHistoryRates';
 
-export default [setCurrentExchangeSaga];
+export default [setCurrencyFromSaga, getHistoryRatesSaga];
