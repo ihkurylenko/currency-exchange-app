@@ -83,12 +83,8 @@ class CurrencyBlock extends Component {
     });
   };
 
-  switchToCurrencyConverter = () => {
-    this.setState({ activeTopic: 'historicalRates' });
-  };
-
-  switchToHistoricalRates = () => {
-    this.setState({ activeTopic: 'currencyConverter' });
+  toogleTopic = topic => {
+    this.setState({ activeTopic: topic });
   };
 
   render() {
@@ -116,10 +112,16 @@ class CurrencyBlock extends Component {
     return (
       <CurrencyBlockStyled>
         <BlockHeader>
-          <TopicContainer active={activeTopic === 'currencyConverter'} onClick={() => this.switchToHistoricalRates()}>
+          <TopicContainer
+            active={activeTopic === 'currencyConverter'}
+            onClick={() => this.toogleTopic('currencyConverter')}
+          >
             <Topic>Currency converter</Topic>
           </TopicContainer>
-          <TopicContainer active={activeTopic === 'historicalRates'} onClick={() => this.switchToCurrencyConverter()}>
+          <TopicContainer
+            active={activeTopic === 'historicalRates'}
+            onClick={() => this.toogleTopic('historicalRates')}
+          >
             <Topic>Historical rates</Topic>
           </TopicContainer>
         </BlockHeader>
