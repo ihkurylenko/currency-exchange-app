@@ -7,6 +7,7 @@ import { req as getExchangeRates } from '../actions/getExchangeRates';
 import { CurrencyBlock } from 'public/features/CurrencyBlock/components/CurrencyBlock';
 import { CurrentRatesBlock } from 'public/features/CurrentRatesBlock/components/CurrentRatesBlock';
 import { Loader } from 'shared/layouts/Loader/Loader';
+import { Error } from 'shared/layouts/Error/Error';
 import { ExchangesAppStyled } from './styles';
 
 class ExchangesApp extends Component {
@@ -18,21 +19,22 @@ class ExchangesApp extends Component {
     const { status } = this.props;
 
     return (
-      <React.Fragment>
-        {status === 'REQ' && <Loader />}
+      <ExchangesAppStyled>
         {status === 'GOT' && (
-          <ExchangesAppStyled>
+          <React.Fragment>
             <CurrencyBlock />
             <CurrentRatesBlock />
-          </ExchangesAppStyled>
+          </React.Fragment>
         )}
-      </React.Fragment>
+        {status === 'REQUEST' && <Loader />}
+        {status === 'ERROR' && <Error />}
+      </ExchangesAppStyled>
     );
   }
 }
 
-const mapStateToProps = store => ({
-  status: store.getExchangeRates.status
+const mapStateToProps = ({ getExchangeRates }) => ({
+  status: getExchangeRates.status
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({ getExchangeRates }, dispatch);
