@@ -11,7 +11,9 @@ import { Error } from 'shared/layouts/Error/Error';
 import { ExchangesAppStyled } from './styles';
 
 const ExchangesApp = ({ getExchangeRates, status }) => {
-  React.useEffect(() => getExchangeRates(), []);
+  React.useEffect(() => {
+    getExchangeRates();
+  }, []);
 
   return (
     <ExchangesAppStyled>
