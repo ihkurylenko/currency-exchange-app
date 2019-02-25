@@ -8,10 +8,10 @@ function* historyRates(action) {
     const { startAt, endAt, base } = action.request;
 
     const res = yield call(getHistoryRates, { start_at: startAt, end_at: endAt, base });
-    const mapped = Object.keys(res.rates).map(k => res.rates[k]);
-    const arrayOfDates = Object.keys(res.rates);
+    const sortedDates = Object.keys(res.rates).sort();
+    const mapped = sortedDates.map(k => res.rates[k]);
     const arrayOfRates = mapped.map(item => item[store.currencyValues.currencyTo]);
-    yield put(got({ ...res, arrayOfRates, arrayOfDates }));
+    yield put(got({ ...res, arrayOfRates, arrayOfDates: sortedDates }));
   } catch (e) {
     yield put(err(e));
   }
