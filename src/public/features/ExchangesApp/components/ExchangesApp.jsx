@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -10,28 +10,22 @@ import { Loader } from 'shared/layouts/Loader/Loader';
 import { Error } from 'shared/layouts/Error/Error';
 import { ExchangesAppStyled } from './styles';
 
-class ExchangesApp extends Component {
-  componentDidMount() {
-    this.props.getExchangeRates();
-  }
+const ExchangesApp = ({ getExchangeRates, status }) => {
+  React.useEffect(() => getExchangeRates(), []);
 
-  render() {
-    const { status } = this.props;
-
-    return (
-      <ExchangesAppStyled>
-        {status === 'GOT' && (
-          <React.Fragment>
-            <CurrencyBlock />
-            <CurrentRatesBlock />
-          </React.Fragment>
-        )}
-        {status === 'REQUEST' && <Loader />}
-        {status === 'ERROR' && <Error />}
-      </ExchangesAppStyled>
-    );
-  }
-}
+  return (
+    <ExchangesAppStyled>
+      {status === 'GOT' && (
+        <React.Fragment>
+          <CurrencyBlock />
+          <CurrentRatesBlock />
+        </React.Fragment>
+      )}
+      {status === 'REQUEST' && <Loader />}
+      {status === 'ERROR' && <Error />}
+    </ExchangesAppStyled>
+  );
+};
 
 const mapStateToProps = ({ getExchangeRates }) => ({
   status: getExchangeRates.status
